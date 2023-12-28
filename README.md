@@ -44,7 +44,7 @@ FDK Extension Helper Library
 
 ```java
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.fynd.**", "com.fynd.**","com.gofynd","com.sdk.**"})
+@ComponentScan(basePackages = {"com.fynd.**", "com.fynd.**","com.gofynd","com.sdk.v1_8_5.**"})
 public class EmailExtensionApplication {
     
     private String CACHE_PREFIX_KEY  = "inv_email";

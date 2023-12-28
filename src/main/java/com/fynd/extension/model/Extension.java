@@ -13,8 +13,8 @@ import com.fynd.extension.storage.BaseStorage;
 import com.sdk.common.RequestSignerInterceptor;
 import com.sdk.common.RetrofitServiceFactory;
 import com.sdk.common.model.AccessTokenDto;
-import com.sdk.platform.PlatformClient;
-import com.sdk.platform.PlatformConfig;
+import com.sdk.v1_8_5.platform.PlatformClient;
+import com.sdk.v1_8_5.platform.PlatformConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -189,11 +189,11 @@ public class Extension {
         return Objects.equals(this.extensionProperties.getAccessMode(), AccessMode.ONLINE.getName());
     }
 
-    public PlatformClient getPlatformClient(String companyId, Session session) {
+    public <S>S getPlatformClient(Class<S> platformClass, Class platformConfigClass, String companyId, Session session) {
         if (!this.isInitialized) {
             throw new FdkInvalidExtensionConfig("Extension not initialized due to invalid data");
         }
-        PlatformConfig platformConfig = this.getPlatformConfig(companyId);
+        platformConfigClass platformConfig = this.getPlatformConfig(companyId);
         AccessTokenDto accessTokenDto = buildAccessToken(session);
         platformConfig.getPlatformOauthClient()
                       .setToken(accessTokenDto);
@@ -225,11 +225,11 @@ public class Extension {
         return platformClient;
     }
 
-    public PlatformConfig getPlatformConfig(String companyId) {
+    public <S>S getPlatformConfig(Class<S> platformConfigClass, String companyId) {
         if (!this.isInitialized) {
             throw new FdkInvalidExtensionConfig("Extension not initialized due to invalid data");
         }
-        return new PlatformConfig(companyId, this.extensionProperties.getApiKey(),
+        return new platformConfigClass(companyId, this.extensionProperties.getApiKey(),
                                   this.extensionProperties.getApiSecret(), this.extensionProperties.getCluster(),
                                   false);
     }

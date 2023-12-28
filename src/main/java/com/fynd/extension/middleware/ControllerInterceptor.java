@@ -5,9 +5,8 @@ import com.fynd.extension.controllers.BaseApplicationController;
 import com.fynd.extension.controllers.BasePlatformController;
 import com.fynd.extension.model.*;
 import com.fynd.extension.session.Session;
-import com.sdk.application.ApplicationClient;
-import com.sdk.application.ApplicationConfig;
-import com.sdk.platform.PlatformClient;
+
+import com.sdk.v1_8_5.platform.PlatformClient;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -66,14 +65,30 @@ public class ControllerInterceptor implements HandlerInterceptor {
                         Application application = objectMapper.readValue(request.getHeader(Fields.X_APPLICATION_DATA), Application.class);
                         request.setAttribute("application", application);
 
-                        ApplicationConfig applicationConfig = new ApplicationConfig(
+                        com.sdk.v1_8_5.application.ApplicationConfig applicationConfig185 = new com.sdk.v1_8_5.application.ApplicationConfig(
                                 application.getID(),
                                 application.getToken(),
                                 extension.getExtensionProperties().getCluster()
                         );
+                        com.sdk.v1_8_6.application.ApplicationConfig applicationConfig186 = new com.sdk.v1_8_6.application.ApplicationConfig(
+                                application.getID(),
+                                application.getToken(),
+                                extension.getExtensionProperties().getCluster()
+                        );
+                        com.sdk.v1_8_7.application.ApplicationConfig applicationConfig = new com.sdk.v1_8_7.application.ApplicationConfig(
+                                application.getID(),
+                                application.getToken(),
+                                extension.getExtensionProperties().getCluster()
+                        );
+                        request.setAttribute("applicationConfig185", applicationConfig185);
+                        request.setAttribute("applicationConfig186", applicationConfig186);
                         request.setAttribute("applicationConfig", applicationConfig);
 
-                        ApplicationClient applicationClient = new ApplicationClient(applicationConfig);
+                        com.sdk.v1_8_5.application.ApplicationClient applicationClient185 = new com.sdk.v1_8_5.application.ApplicationClient(applicationConfig185);
+                        com.sdk.v1_8_6.application.ApplicationClient applicationClient186 = new com.sdk.v1_8_6.application.ApplicationClient(applicationConfig186);
+                        com.sdk.v1_8_7.application.ApplicationClient applicationClient = new com.sdk.v1_8_7.application.ApplicationClient(applicationConfig);
+                        request.setAttribute("applicationClient185", applicationClient185);
+                        request.setAttribute("applicationClient186", applicationClient186);
                         request.setAttribute("applicationClient", applicationClient);
                     }
                     return true;
